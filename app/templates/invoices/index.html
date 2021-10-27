@@ -1,0 +1,64 @@
+{% extends "./layouts/app-layout.html" %}
+{% block title %} {{ page.title }} {% endblock %}
+{% block content %}
+
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <h3 class="text-primary">Listado de facturas</h3>
+    <div>
+        <a href="{{url_for('store_invoice')}}" class="btn btn-sm btn-primary ms-3"><i
+                class="fas fa-user-plus me-2"></i>Agregar factura</a>
+        <a href="{{url_for('index_invoice')}}" class="btn btn-sm btn-outline-secondary"><i
+                class="fas fa-sync-alt me-2"></i>Sincronizar</a>
+    </div>
+</div>
+
+<section>
+    <table class="table table-hover table-borderless">
+        <thead class="table-light lh-lg border-bottom">
+            <tr>
+                <th>Fecha documento</th>
+                <th>Cliente</th>
+                <th class="text-center">Valor</th>
+                <th class="text-center">Saldo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if page.invoices %}
+            {% for invoice in page.invoices %}
+            <tr class="align-middle">
+                <td class="text-center"> {{ invoice.date }} </td>
+                <td>
+                    <a href="{{url_for('customer_profile', id=invoice.customer_id)}}"
+                        class="text-decoration-none text-reset">{{
+                        invoice.customer_name }}</a>
+                </td>
+                <td class="text-end"> {{ invoice.price }} </td>
+                <td class="text-end"> {{ invoice.balance }} </td>
+                <td class="d-flex justify-content-center">
+                    <div class="d-flex flex-row justify-content-between align-items-center w-75">
+                        <form action="{{url_for('update_invoice', id=invoice.id)}}" method="get">
+                            <button type="submit" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-pen me-2"></i>Editar</button>
+                        </form>
+                        {% if not invoice.customer_active and invoice.balance <= 0 %} <form
+                            action="{{url_for('delete_invoice', id=invoice.id)}}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar
+                            </button>
+                            </form>
+                            {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center"> No existe conexión a base de datos </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

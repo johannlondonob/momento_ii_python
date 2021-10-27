@@ -1,0 +1,80 @@
+{% extends "./layouts/app-layout.html" %}
+{% block title %} Clientes {% endblock %}
+{% block content %}
+
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <div>
+        <h3 class=" text-primary">Lista de facturas por cliente</h3>
+    </div>
+    <div>
+        <a href="{{url_for('index_customer')}}" class="btn btn-sm btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Regresar a la lista</a>
+        <a href="{{url_for('index')}}" class="btn btn-sm btn-outline-secondary"><i
+                class="fas fa-sync-alt me-2"></i>Sincronizar</a>
+    </div>
+</div>
+<div class="row my-3 mx-0 px-0 d-flex">
+    <div class="row col-6 mx-0 px-0">
+        <div class="col-6 ps-0">
+            <div class="form-group">
+                <label class="form-label" for="name">Cliente</label>
+                <input type="text" id="name" class="form-control" value="{{page.customer.name}}" readonly />
+            </div>
+        </div>
+        <div class="col-6 ps-0">
+            <div class="form-group">
+                <label class="form-label" for="email">Correo electrónico</label>
+                <input type="email" id="email" class="form-control" value="{{page.customer.email}}" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="row col-6 mx-0 px-0">
+        <div class="d-flex flex-row justify-content-end align-items-center mx-0 px-0">
+            <a href="{{url_for('store_customer_invoice', id=page.customer.id)}}" class="btn btn-primary"><i class="fas fa-file-invoice-dollar me-2"></i>Factura
+                nueva</a>
+        </div>
+    </div>
+</div>
+
+<section>
+    <table class="table table-hover table-borderless">
+        <thead class="table-light lh-lg border-bottom">
+            <tr>
+                <th class="text-center">Número factura</th>
+                <th class="text-center">Fecha documento</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Saldo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if page.customer_invoices %}
+            {% for customer_invoice in page.customer_invoices %}
+            <tr class="align-middle">
+                <td class="text-center"> {{ customer_invoice.invoice_id }} </td>
+                <td class="text-center"> {{ customer_invoice.date }} </td>
+                <td class="text-end"> {{ customer_invoice.price }} </td>
+                <td class="text-end"> {{ customer_invoice.balance}} </td>
+                <td class="d-flex justify-content-center">
+                    <div class="d-flex flex-row justify-content-around align-items-center w-75">
+                        <form action="{{url_for('update_customer', id=customer_invoice.invoice_id)}}" method="get">
+                            <button type="submit" class="btn btn-sm btn-outline-info"><i class="fas fa-pen me-2"></i>Editar</button>
+                        </form>
+                        {% if customer_invoice.balance <= 0 %} <form
+                            action="{{url_for('delete_customer', id=customer_invoice.invoice_id)}}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-warning"><i class="fas fa-trash-alt me-2"></i>Eliminar</a>
+                                </form>
+                                {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center"> No existe conexión a base de datos </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "./layouts/app-layout.html" %}
+{% block title %} {{ page.title}} {% endblock %}
+{% block content %}
+
+<div class="container my-5 w-50">
+    <div class="d-flex flex-row justify-content-between align-items-center pb-2 border-bottom border-light">
+        <h6 class="fs-4  text-primary my-0">Nueva factura</h6>
+        <div>
+            <a href="{{url_for('index_invoice')}}" class="btn btn-sm btn-outline-secondary"><i
+                    class="fas fa-arrow-left me-2"></i>Regresar a la lista</a>
+        </div>
+    </div>
+
+    <p class="my-0 word-wrap">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium adipisci fuga
+        animi id temporibus</p>
+
+    <section>
+        <form action="{{url_for('store_invoice')}}" method="post" class="d-flex flex-column pt-3">
+            <div class="w-75 d-flex flex-column">
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-4">
+                        <label for="customer_id">Cliente</label>
+                    </div>
+                    <div class="col-8">
+                        <select name="customer_id" id="customer_id" class="form-select">
+                            <option selected>Selecciona un cliente</option>
+                            {% for customer in page.customers %}
+                            <option value="{{ customer.id }}"> {{ customer.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-4">
+                        <label for="date">Fecha documento</label>
+                    </div>
+                    <div class="col-8">
+                        <input name="date" type="date" class="form-control" id="date" required>
+                    </div>
+                </div>
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-4">
+                        <label for="price">Precio</label>
+                    </div>
+                    <div class="col-8">
+                        <input name="price" type="number" class="form-control" id="price"
+                            placeholder="Digite el valor de la factura" required>
+                    </div>
+                </div>
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-4">
+                        <label for="balance">Saldo</label>
+                    </div>
+                    <div class="col-8">
+                        <input name="balance" type="number" class="form-control" id="balance"
+                            placeholder="Digite el saldo del cliente" required>
+                    </div>
+                </div>
+                <div class="mt-4 col-8 align-self-end">
+                    <button type="submit" class="btn btn-primary w-100">Facturar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+
+{% endblock %}

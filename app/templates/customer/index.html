@@ -1,0 +1,73 @@
+{% extends "./layouts/app-layout.html" %}
+{% block title %} {{ page.title }} {% endblock %}
+{% block content %}
+
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <h3 class=" text-primary">Listado de usuarios</h3>
+    <div>
+        <a href="{{url_for('store_customer')}}" class="btn btn-sm btn-primary ms-3"><i
+                class="fas fa-user-plus me-2"></i>Agregar cliente</a>
+        <a href="{{url_for('index_customer')}}" class="btn btn-sm btn-outline-secondary"><i
+                class="fas fa-sync-alt me-2"></i>Sincronizar</a>
+    </div>
+</div>
+
+<section>
+    <table class="table table-hover table-borderless">
+        <thead class="table-light lh-lg border-bottom">
+            <tr>
+                <th>Nombres</th>
+                <th>Correo electrónico</th>
+                <th>Teléfono</th>
+                <th class="text-center">¿Usuario activo?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if page.customers %}
+            {% for customer in page.customers %}
+            <tr class="align-middle">
+                <td> {{ customer.name }} </td>
+                <td> {{ customer.email }} </td>
+                <td> {{ customer.mobile }} </td>
+                {% if customer.active %}
+                <td class="text-center"> <i class="fas fa-check text-success"></i> </td>
+                {% else %}
+                <td class="text-center"> <i class="fas fa-times text-danger"></i> </td>
+                {% endif %}
+                <td class="d-flex justify-content-center">
+                    <div class="d-flex flex-row justify-content-between align-items-center w-75">
+                        <form action="{{url_for('customer_profile', id=customer.id)}}" method="get">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary"><i
+                                    class="fas fa-table me-2"></i>Ver perfil</button>
+                        </form>
+                        {% if customer.active %}
+                        <form action="{{url_for('store_customer_invoice', id=customer.id)}}" method="get">
+                            <button type="submit" class="btn btn-sm btn-outline-success"><i
+                                    class="fas fa-file-invoice-dollar me-2"></i>Facturar</button>
+                        </form>
+                        {% endif %}
+                        <form action="{{url_for('update_customer', id=customer.id)}}" method="get">
+                            <button type="submit" class="btn btn-sm btn-outline-info"><i
+                                    class="fas fa-pen me-2"></i>Editar</button>
+                        </form>
+                        {% if not customer.has_invoices %}
+                        <form action="{{url_for('delete_customer', id=customer.id)}}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-warning"><i
+                                    class="fas fa-trash-alt me-2"></i>Eliminar</a>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center"> No existe conexión a base de datos </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
