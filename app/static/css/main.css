@@ -1,0 +1,24 @@
+.banner {
+    width: 60px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.text-banner {
+    height: 100%;
+    text-align: center;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: 1em;
+    transition: all ease-in-out 1.5s;
+    cursor: default;
+}
+
+.text-banner:hover {
+    width: 100px;
+    transform: translateX(-80px);
+    font-weight: bolder;
+    letter-spacing: 2em;
+}
